@@ -97,9 +97,37 @@ Experience : 0+ years
     • Experience with Streamlit or Gradio
     • Interest in responsible AI and bias mitigation
 
+## Resume parser.py
+- implemented extract function using pdfplumbe
+- implemented 3 layers for cleaning the text
+    - special characters replaced
+    - formatting errors
+    - section merged with content
+- batch loading of functions
+- PII masking for logs
+
+### Input Validation: validator.py
+
+A pre-flight validation step was added between resume parsing and LLM 
+scoring. Resumes that fail validation are rejected with a specific reason 
+before any LLM call is made.
+
+Checks performed:
+- Minimum text length (200 chars)
+- Presence of at least one core section (experience/education/skills)
+- Word count threshold (150 words minimum)
+- Noise rate check (garbled character ratio)
+
+Reasoning: LLMs hallucinate structure from noisy input — a corrupt resume 
+can produce plausible-looking but fabricated scores. Early rejection with 
+a clear reason is more useful than a downstream hallucination. It also 
+saves API tokens and latency.
+
 ## What I Would Add With More Time
 - Hybrid section-splitting for lower token cost at scale
 - LangGraph for conditional branching on input type
 - LinkedIn JSON profile ingestion
 - OAuth authentication on Streamlit endpoint
 - LangSmith tracing for observability**
+
+

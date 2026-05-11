@@ -63,9 +63,9 @@ Four approaches evaluated:
 | Unauthorised Access | Planned: OAuth on Streamlit endpoint in production |
 
 ## Sample Output
-=======================================================
+
 role: AI Enablement Intern
-=======================================================
+
 Experience : 0+ years
  Education : Currently pursuing a degree in Computer Science or related field
 

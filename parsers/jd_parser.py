@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
         # Save raw JSON output for inspection and DEVLOG
         output = requirements.model_dump()
-        with open("jd_output.json", "w") as f:
+        with open("../output/jd_output.json", "w") as f:
             json.dump(output, f, indent=2)
 
         print("Raw JSON saved to jd_output.json")

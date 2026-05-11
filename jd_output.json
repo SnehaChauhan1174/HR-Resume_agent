@@ -6,9 +6,12 @@
     "written and verbal communication skills"
   ],
   "preferred_skills": [
-    "LLMs or AI tools like ChatGPT or Claude",
-    "LangChain or CrewAI",
-    "Git and GitHub"
+    "LLMs",
+    "AI tools like ChatGPT or Claude",
+    "LangChain",
+    "CrewAI",
+    "Git",
+    "GitHub"
   ],
   "experience_years_min": 0,
   "education_required": "Currently pursuing a degree in Computer Science or related field",

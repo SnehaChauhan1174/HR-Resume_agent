@@ -1,7 +1,7 @@
 # HR Resume Shortlisting Agent — Dev Log
 
 **Project:** AI Enablement Internship — Task 1
-**Developer:** [Your Name]
+
 **Stack:** Python · Llama 3.3 70B via Groq · pdfplumber · Pydantic · Streamlit
 
 ---
@@ -382,37 +382,93 @@ Cleaning pipeline correctly handled:
 ---
 
 ### Problems Hit and How Solved
+## Resume Scoring Output Refactor
 
-**Problem 1 — Global list bug in resume parser**
-`texts = []` was defined outside `extract_resume_text()` as a module-
-level variable. When called on multiple resumes in sequence, each call
-appended to the same list — resume 2 contained resume 1 + resume 2
-text combined.
+Updated `scorer.py` to use a dictionary-based resume format for consistency with profile and other JSON-based properties.
 
-Solution: moved `texts = []` inside the function so each call starts
-with a fresh empty list. Verified by calling the function twice on the
-same file and confirming both outputs have identical character counts.
+### Changes
+- `scored` now stores:
+  - individual candidate scores
+  - scoring justification
+- Scoring is handled through the `score_all_candidates` function.
 
-**Problem 2 — LLM returning markdown fences around JSON**
-Despite being told to return only JSON, the model occasionally wrapped
-output in ```json ... ``` markdown fences.
+### Issue
+Initially, rejected resumes were appended directly to the `scored` list:
 
-Solution: added a defensive strip in the parse function:
-`raw_text = raw_text.replace("```json", "").replace("```", "").strip()`
-This runs after every API call as a safety net regardless of whether
-fences appear.
+```python
+scored.append(rejected_resume)
+```
+
+This failed because:
+- `scored` contains `CandidateScore` objects
+- rejected resumes are plain dictionaries
+
+### Final Design
+Separated output into structured categories instead of mixing object types.
+
+```python
+final_output = {
+    "scored_candidates": [s.to_dict() for s in scored],
+    "rejected_candidates": rejected_resumes,
+    "failed_candidates": failed_candidates
+}
+```
+
+### Result
+- Cleaner and type-safe output structure
+- Consistent JSON response format
+- Easier downstream processing and debugging
 
 
 ---
+## LinkedIn Profile Ingestion (Planned)
 
+The system is being designed to support multiple candidate data sources in addition to PDF resumes. Recruiters will be able to upload LinkedIn profile URLs for candidate evaluation.
 
+### Current Resume Pipeline
 
-## Coming Next
+```text
+PDF Resume
+ → Text Extraction (pdfplumber)
+ → Text Cleaning
+ → Structured Extraction (LLM + Pydantic)
+ → Candidate Profile
+```
 
-### Plan
-- [ ] `core/profile_extractor.py` — LLM structured extraction from
-      resume text → CandidateProfile Pydantic object
-- [ ] `core/scorer.py` — 5-dimension scoring with strict prompt
-- [ ] `core/ranker.py` — sort by weighted total, apply labels
-- [ ] Test with all 5 resumes — verify score spread is realistic
-- [ ] Weak candidate must score below 40, strong candidate above 80
+### Planned LinkedIn Pipeline
+
+```text
+LinkedIn URL
+ → Profile Scraping / Extraction
+ → Raw Profile Text
+ → Structured Extraction (LLM + Pydantic)
+ → Candidate Profile
+```
+
+Both resumes and LinkedIn profiles will ultimately produce the same standardized candidate schema, enabling reuse of the same:
+- validation pipeline
+- scoring engine
+- ranking logic
+- recruiter dashboard
+
+### Unified Candidate Schema
+
+```json
+{
+  "name": "Rahul Sharma",
+  "skills": ["Python", "FastAPI", "Docker"],
+  "experience": [...],
+  "education": [...],
+  "projects": [...],
+  "certifications": [...]
+}
+```
+
+### Planned Extraction Approaches
+
+- Browser automation using Playwright/Selenium
+- Third-party APIs such as Proxycurl
+- Manual LinkedIn PDF/text uploads
+
+This architecture also makes it easy to support future sources such as GitHub profiles, portfolio websites, and coding platforms.
+

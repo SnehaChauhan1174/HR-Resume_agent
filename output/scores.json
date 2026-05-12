@@ -1,0 +1,54 @@
+[
+  {
+    "candidate_name": "Rahul Sharma",
+    "skills_match": {
+      "score": 7.0,
+      "justification": "The candidate has two out of three required skills: Python and APIs are present through Django REST and FastAPI, but communication is not explicitly mentioned as a skill."
+    },
+    "experience_relevance": {
+      "score": 6.0,
+      "justification": "The candidate has relevant experience in software development, but it is not directly related to AI enablement, having worked as a software engineering intern and backend developer intern."
+    },
+    "education_certs": {
+      "score": 9.0,
+      "justification": "The candidate has a Computer Science degree with a high CGPA of 8.6 from a prestigious institution, exceeding the education requirements."
+    },
+    "project_portfolio": {
+      "score": 8.0,
+      "justification": "The candidate has quality projects such as SentiNews, which is relevant to AI, but it does not directly demonstrate experience with AI agents or responsible AI."
+    },
+    "communication_quality": {
+      "score": 5.0,
+      "justification": "The candidate's profile is well-structured, but there is no explicit evidence of strong communication skills, which are required for the role."
+    },
+    "weighted_total": 7.05,
+    "recommendation": "hire",
+    "summary": "Rahul Sharma is a strong candidate with a solid education background and relevant experience in software development, but may require additional training to meet the specific requirements of the AI Enablement Intern role. Overall, the candidate has a good balance of skills and experience, making them a suitable hire for the position."
+  },
+  {
+    "candidate_name": "Sneha Chauhan",
+    "skills_match": {
+      "score": 5.0,
+      "justification": "The candidate has one required skill, Python, but lacks explicit mention of APIs and communication skills."
+    },
+    "experience_relevance": {
+      "score": 0.0,
+      "justification": "The candidate has no relevant work experience listed in their profile."
+    },
+    "education_certs": {
+      "score": 9.0,
+      "justification": "The candidate has a relevant degree in Artificial Intelligence and Machine Learning with a high CGPA, exceeding the education requirements."
+    },
+    "project_portfolio": {
+      "score": 7.0,
+      "justification": "The candidate has a variety of projects, including one that uses Streamlit, a nice-to-have skill, but none of the projects directly relate to building AI agents or responsible AI."
+    },
+    "communication_quality": {
+      "score": 6.0,
+      "justification": "The candidate's project descriptions are clear and well-structured, but the resume could benefit from more details on their skills and experience."
+    },
+    "weighted_total": 4.85,
+    "recommendation": "maybe",
+    "summary": "Sneha Chauhan is a strong educational background candidate with relevant skills and projects, but lacks relevant work experience and some required skills, making them a maybe hire. With some training and development, Sneha could potentially fill the AI Enablement Intern role, but would need to demonstrate their ability to learn and adapt to the required skills and responsibilities."
+  }
+]

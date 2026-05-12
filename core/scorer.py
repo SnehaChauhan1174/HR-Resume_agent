@@ -1,16 +1,18 @@
 # core/scorer.py
-
 from dotenv import load_dotenv
 from groq import Groq
 from pydantic import BaseModel, Field, ValidationError
 from typing import Optional, Literal
 import os
 import json
+from parsers.resume_parser import run_pipeline
+
+passed_resumes, failed_resumes, rejected_resumes = run_pipeline()
 
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# ── Pydantic models ───────────────────────────────────────────────────────────
+# Pydantic models
 
 class DimensionScore(BaseModel):
     score: float = Field(ge=0, le=10)
@@ -30,7 +32,7 @@ class CandidateScore(BaseModel):
     def to_dict(self) -> dict:
         return self.model_dump()
 
-# ── Scoring prompt ────────────────────────────────────────────────────────────
+# ── Scoring prompt
 SYSTEM_PROMPT = """You are a strict, unbiased HR evaluator with 10 years of 
 experience screening candidates across top tech companies.
 
@@ -92,7 +94,7 @@ JSON structure:
   "summary": "two sentence overall assessment"
 }"""
 
-# ── Weight constants ──────────────────────────────────────────────────────────
+# ── Weight constants
 WEIGHTS = {
     "skills_match"         : 0.30,
     "experience_relevance" : 0.25,
@@ -101,12 +103,9 @@ WEIGHTS = {
     "communication_quality": 0.10,
 }
 
-# ── Weighted total — always calculated in Python ──────────────────────────────
+# Weighted total
 def calculate_weighted_total(score: CandidateScore) -> float:
-    """
-    Never trust LLM arithmetic.
-    Always recalculate weighted total in Python.
-    """
+
     return round(
         score.skills_match.score          * WEIGHTS["skills_match"]          +
         score.experience_relevance.score  * WEIGHTS["experience_relevance"]  +
@@ -116,20 +115,15 @@ def calculate_weighted_total(score: CandidateScore) -> float:
         2
     )
 
-# ── Main scorer function ──────────────────────────────────────────────────────
+# Main scorer function
 def score_candidate(
         jd_requirements: dict,
         candidate_profile: dict
 ) -> CandidateScore | None:
-    """
-    Takes JD requirements dict and candidate profile dict.
-    Returns validated CandidateScore object.
-    Returns None if scoring fails — caller handles gracefully.
-    """
 
     candidate_name = candidate_profile.get("name", "Unknown")
 
-    # ── Build user message ────────────────────────────────────────────────────
+    #Build user message
     # strip PII from profile before sending — email, phone not needed for scoring
     scoring_profile = {
         "name"                  : candidate_name,
@@ -151,7 +145,7 @@ CANDIDATE PROFILE:
 
 Be strict. Score only what is explicitly present in the candidate profile."""
 
-    # ── LLM call ─────────────────────────────────────────────────────────────
+    #LLM call
     try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -163,10 +157,10 @@ Be strict. Score only what is explicitly present in the candidate profile."""
         raw_text = response.choices[0].message.content.strip()
 
     except Exception as e:
-        print(f"    ✗ LLM call failed for {candidate_name} — {e}")
+        print(f"LLM call failed for {candidate_name} — {e}")
         return None
 
-    # ── Parse JSON ────────────────────────────────────────────────────────────
+    # ── Parse JSON
     try:
         clean = (
             raw_text
@@ -179,11 +173,11 @@ Be strict. Score only what is explicitly present in the candidate profile."""
         data = json.loads(clean)
 
     except json.JSONDecodeError as e:
-        print(f"    ✗ JSON parse failed for {candidate_name} — {e}")
-        print(f"      Raw output: {raw_text[:200]}")
+        print(f" JSON parse failed for {candidate_name} — {e}")
+        print(f" Raw output: {raw_text[:200]}")
         return None
 
-    # ── Validate with Pydantic ────────────────────────────────────────────────
+    # ── Validate with Pydantic
     try:
         score = CandidateScore(**data)
 
@@ -193,10 +187,10 @@ Be strict. Score only what is explicitly present in the candidate profile."""
         return score
 
     except ValidationError as e:
-        print(f"    ✗ Validation failed for {candidate_name} — {e}")
+        print(f"Validation failed for {candidate_name} — {e}")
         return None
 
-# ── Batch scoring ─────────────────────────────────────────────────────────────
+#Batch scoring
 def score_all_candidates(
         passed_resumes: list,
         jd_requirements: dict
@@ -218,7 +212,7 @@ def score_all_candidates(
     print(f"\n  Scoring {len(passed_resumes)} candidate(s)...\n")
 
     for i, res in enumerate(passed_resumes, 1):
-        profile = res.to_dict()
+        profile = res
         name    = profile.get("name", f"Candidate {i}")
 
         print(f"  [{i}/{len(passed_resumes)}] Scoring {name}...")
@@ -230,15 +224,15 @@ def score_all_candidates(
 
         if score:
             scored.append(score)
-            print(f"    ✓ {name}")
-            print(f"      Skills        : {score.skills_match.score}/10")
-            print(f"      Experience    : {score.experience_relevance.score}/10")
-            print(f"      Education     : {score.education_certs.score}/10")
-            print(f"      Projects      : {score.project_portfolio.score}/10")
-            print(f"      Communication : {score.communication_quality.score}/10")
-            print(f"      ─────────────────────────────")
-            print(f"      Weighted Total: {score.weighted_total}/10")
-            print(f"      Recommendation: {score.recommendation.upper()}")
+            print(f" {name}")
+            print(f"  Skills        : {score.skills_match.score}/10")
+            print(f"  Experience    : {score.experience_relevance.score}/10")
+            print(f"  Education     : {score.education_certs.score}/10")
+            print(f"  Projects      : {score.project_portfolio.score}/10")
+            print(f"  Communication : {score.communication_quality.score}/10")
+            print(f"  ─────────────────────────────")
+            print(f"  Weighted Total: {score.weighted_total}/10")
+            print(f"  Recommendation: {score.recommendation.upper()}")
             print()
         else:
             errored.append({
@@ -249,12 +243,9 @@ def score_all_candidates(
 
     return scored, errored
 
-# ── Save scores to output ─────────────────────────────────────────────────────
-def save_scores(scored: list[CandidateScore], output_path: str = "output/scores.json"):
-    """
-    Saves all candidate scores to output/scores.json.
-    This is your sample output for the submission.
-    """
+#Save scores to output
+def save_scores(scored: list[CandidateScore], output_path: str = "../output/scores.json"):
+
     from pathlib import Path
     Path(output_path).parent.mkdir(exist_ok=True)
 
@@ -264,7 +255,6 @@ def save_scores(scored: list[CandidateScore], output_path: str = "output/scores.
 
     print(f"  Scores saved → {output_path}")
 
-# ── Quick test ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
 
     sample_jd = {
@@ -278,50 +268,49 @@ if __name__ == "__main__":
         "nice_to_have"        : ["Streamlit", "responsible AI"]
     }
 
-    # Strong candidate
-    strong_profile = {
-        "name"                  : "Rahul Sharma",
-        "skills"                : ["Python", "FastAPI", "Docker", "AWS", "LangChain", "Git"],
-        "total_experience_years": 0.5,
-        "experience"            : [
-            {"role": "SWE Intern", "company": "Google",
-             "duration_months": 3, "skills_used": ["Python", "BigQuery"]}
-        ],
-        "education"             : [
-            {"degree": "B.Tech Computer Science",
-             "institute": "IIT Roorkee", "cgpa": 8.6, "year": 2024}
-        ],
-        "projects"              : [
-            {"name": "AI Agent", "description": "LLM-based task automation",
-             "tech_stack": ["Python", "LangChain", "FastAPI"]}
-        ],
-        "certifications"        : ["AWS Certified Solutions Architect"]
-    }
+    # # Strong candidate
+    # strong_profile = {
+    #     "name"                  : "Rahul Sharma",
+    #     "skills"                : ["Python", "FastAPI", "Docker", "AWS", "LangChain", "Git"],
+    #     "total_experience_years": 0.5,
+    #     "experience"            : [
+    #         {"role": "SWE Intern", "company": "Google",
+    #          "duration_months": 3, "skills_used": ["Python", "BigQuery"]}
+    #     ],
+    #     "education"             : [
+    #         {"degree": "B.Tech Computer Science",
+    #          "institute": "IIT Roorkee", "cgpa": 8.6, "year": 2024}
+    #     ],
+    #     "projects"              : [
+    #         {"name": "AI Agent", "description": "LLM-based task automation",
+    #          "tech_stack": ["Python", "LangChain", "FastAPI"]}
+    #     ],
+    #     "certifications"        : ["AWS Certified Solutions Architect"]
+    # }
+    #
+    # # Weak candidate
+    # weak_profile = {
+    #     "name"                  : "John Smith",
+    #     "skills"                : ["Cooking", "Menu Planning", "Food Safety"],
+    #     "total_experience_years": 5.0,
+    #     "experience"            : [
+    #         {"role": "Head Chef", "company": "Hotel Grand",
+    #          "duration_months": 60, "skills_used": ["Cooking"]}
+    #     ],
+    #     "education"             : [
+    #         {"degree": "Diploma in Culinary Arts",
+    #          "institute": "Culinary School", "cgpa": None, "year": 2018}
+    #     ],
+    #     "projects"              : [],
+    #     "certifications"        : ["Food Safety Certificate"]
+    # }
 
-    # Weak candidate
-    weak_profile = {
-        "name"                  : "John Smith",
-        "skills"                : ["Cooking", "Menu Planning", "Food Safety"],
-        "total_experience_years": 5.0,
-        "experience"            : [
-            {"role": "Head Chef", "company": "Hotel Grand",
-             "duration_months": 60, "skills_used": ["Cooking"]}
-        ],
-        "education"             : [
-            {"degree": "Diploma in Culinary Arts",
-             "institute": "Culinary School", "cgpa": None, "year": 2018}
-        ],
-        "projects"              : [],
-        "certifications"        : ["Food Safety Certificate"]
-    }
 
-    print("="*55)
-    print("  SCORER TEST")
-    print("="*55)
+    print("SCORER TEST")
 
-    for profile in [strong_profile, weak_profile]:
+    for profile in passed_resumes:
         print(f"\nScoring: {profile['name']}")
-        print("-"*40)
+
         score = score_candidate(sample_jd, profile)
         if score:
             print(f"Skills        : {score.skills_match.score}/10 — {score.skills_match.justification}")
@@ -329,7 +318,19 @@ if __name__ == "__main__":
             print(f"Education     : {score.education_certs.score}/10 — {score.education_certs.justification}")
             print(f"Projects      : {score.project_portfolio.score}/10 — {score.project_portfolio.justification}")
             print(f"Communication : {score.communication_quality.score}/10 — {score.communication_quality.justification}")
-            print(f"{'─'*40}")
+
             print(f"Weighted Total: {score.weighted_total}/10")
             print(f"Recommendation: {score.recommendation.upper()}")
             print(f"Summary       : {score.summary}")
+    scored,_=score_all_candidates(passed_resumes,sample_jd)
+    final_output = {
+        "scored_candidates": [s.to_dict() for s in scored],
+        "rejected_candidates": rejected_resumes,
+        "failed_candidates": failed_resumes
+    }
+
+    with open("../output/final_output.json", "w") as f:
+        json.dump(final_output, f, indent=2)
+
+    save_scores(scored)
+

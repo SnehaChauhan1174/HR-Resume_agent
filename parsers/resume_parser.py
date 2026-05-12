@@ -9,17 +9,19 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-# ── Config
-RESUME_FOLDER = "../resumes/"
-OUTPUT_FOLDER = "output/"
-LOG_FILE      = "../output/pipeline_log.json"
-JD_FILE       = "sample_jd.txt"
+# so that it don't take paths relative to current directory
+BASE_DIR = Path(__file__).resolve().parent
+
+RESUME_FOLDER = BASE_DIR.parent / "resumes"
+OUTPUT_FOLDER = BASE_DIR / "output"
+LOG_FILE      = BASE_DIR.parent / "output" / "pipeline_log.json"
+JD_FILE       = BASE_DIR / "sample_jd.txt"
 
 # ── Step printer
 def step(number: int, title: str):
-    print(f"\n{'='*55}")
+
     print(f"  STEP {number} — {title}")
-    print(f"{'='*55}")
+
 
 # ── Main pipeline
 def run_pipeline():
@@ -108,7 +110,7 @@ def run_pipeline():
         )
 
         if not is_valid:
-            print(f"    ✗ Filtered out — {reason}")
+            print(f"Filtered out — {reason}")
             rejected.append({
                 "file": pdf_path.name,
                 "candidate_name": res.to_dict().get("name", "Unknown"),
@@ -118,8 +120,8 @@ def run_pipeline():
             continue   # skip to next resume
 
 
-        print(f"    ✓ Passed — {res.to_dict().get('name', pdf_path.stem)}")
-        passed.append(res)
+        print(f"Passed — {res.to_dict().get('name', pdf_path.stem)}")
+        passed.append(res.to_dict())
 
 
     step(3, "Saving Pipeline Log")
@@ -135,7 +137,9 @@ def run_pipeline():
         "rejected"       : rejected,
         # note: passed resumes not logged here — resume text is PII
         "passed_names"   : [
-            r.to_dict().get("name", "Unknown") for r in passed
+            r.get("name") or "Unknown"
+            for r in passed
+
         ]
     }
 

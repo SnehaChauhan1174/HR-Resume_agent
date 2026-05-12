@@ -15,11 +15,8 @@
     "GitHub"
   ],
   "experience_years_min": 0,
-  "education_required": "Currently pursuing a degree in Computer Science or related field",
-  "certifications": [
-    "Any cloud certification",
-    "AI course on Coursera or DeepLearning.AI"
-  ],
+  "education_required": "Computer Science or related field",
+  "certifications": [],
   "key_responsibilities": [
     "Build and prototype AI agent solutions",
     "Document technical decisions and architecture clearly",

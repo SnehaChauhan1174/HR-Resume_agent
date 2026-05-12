@@ -1,0 +1,21 @@
+{
+  "run_timestamp": "2026-05-12T16:30:48.478982",
+  "jd_role": "AI Enablement Intern",
+  "total_found": 3,
+  "passed_count": 2,
+  "failed_count": 0,
+  "rejected_count": 1,
+  "failed": [],
+  "rejected": [
+    {
+      "file": "john_resume.pdf",
+      "candidate_name": "Rahul Sharma",
+      "stage": "filter",
+      "reason": "Low real-word ratio (49.0%) \u2014 resume text appears garbled or binary"
+    }
+  ],
+  "passed_names": [
+    "Rahul Sharma",
+    "Sneha Chauhan"
+  ]
+}

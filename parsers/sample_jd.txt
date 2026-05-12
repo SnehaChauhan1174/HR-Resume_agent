@@ -1,0 +1,29 @@
+Job Title: AI Enablement Intern
+
+        We are looking for a motivated AI Enablement Intern to help us build
+        AI-powered tools. You will prototype, test, and document AI solutions.
+
+        Requirements (Must Have):
+        - Basic programming experience in Python
+        - Understanding of APIs and how to make API calls
+        - Strong written and verbal communication skills
+        - Currently pursuing a degree in Computer Science or related field
+
+        Preferred Skills:
+        - Exposure to LLMs or AI tools like ChatGPT or Claude
+        - Familiarity with LangChain or CrewAI
+        - Experience with Git and GitHub
+
+        Certifications (Plus):
+        - Any cloud certification is a bonus
+        - Completion of any AI course on Coursera or DeepLearning.AI
+
+        Responsibilities:
+        - Build and prototype AI agent solutions
+        - Document technical decisions and architecture clearly
+        - Test agents against real data and iterate on results
+        - Present demos to the team weekly
+
+        Nice to Have:
+        - Experience with Streamlit or Gradio
+        - Interest in responsible AI and bias mitigation

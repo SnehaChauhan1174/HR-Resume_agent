@@ -58,44 +58,10 @@ Four approaches evaluated:
 |------|-----------|
 | Prompt Injection | sanitise_input() strips injection patterns before LLM call |
 | API Key Exposure | python-dotenv + .env + .gitignore — key never hardcoded |
-| PII in Logs | mask_pii_for_logging() masks email/phone before any log write |
 | Hallucination | Pydantic schema validation + Python recalculates weighted total |
 | Unauthorised Access | Planned: OAuth on Streamlit endpoint in production |
 
-## Sample Output
 
-role: AI Enablement Intern
-
-Experience : 0+ years
- Education : Currently pursuing a degree in Computer Science or related field
-
- Required skills (3)
-    • Python
-    • APIs
-    • written and verbal communication skills
-
-  Preferred Skills (7):
-    • LLMs
-    • ChatGPT
-    • Claude
-    • LangChain
-    • CrewAI
-    • Git
-    • GitHub
-
-  Certifications:
-    • cloud certification
-    • AI course on Coursera or DeepLearning.AI
-
-  Key Responsibilities:
-    • Build and prototype AI agent solutions
-    • Document technical decisions and architecture clearly
-    • Test agents against real data and iterate on results
-    • Present demos to the team weekly
-
-  Nice to Have:
-    • Experience with Streamlit or Gradio
-    • Interest in responsible AI and bias mitigation
 
 ## Resume parser.py
 - implemented extract function using pdfplumbe
@@ -126,8 +92,7 @@ saves API tokens and latency.
 ## What I Would Add With More Time
 - Hybrid section-splitting for lower token cost at scale
 - LangGraph for conditional branching on input type
-- LinkedIn JSON profile ingestion
 - OAuth authentication on Streamlit endpoint
-- LangSmith tracing for observability**
+- LangSmith tracing for observability
 
 

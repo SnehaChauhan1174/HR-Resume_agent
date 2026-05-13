@@ -1,21 +1,24 @@
 {
-  "run_timestamp": "2026-05-12T23:24:23.294540",
+  "run_timestamp": "2026-05-13T17:34:39.761724",
   "jd_role": "AI Enablement Intern",
-  "total_found": 3,
-  "passed_count": 2,
+  "total_found": 6,
+  "passed_count": 5,
   "failed_count": 0,
   "rejected_count": 1,
   "failed": [],
   "rejected": [
     {
-      "file": "john_resume.pdf",
+      "file": "messy_resume.pdf",
       "candidate_name": "Rahul Sharma",
       "stage": "filter",
       "reason": "Low real-word ratio (49.0%) \u2014 resume text appears garbled or binary"
     }
   ],
   "passed_names": [
+    "Divya Shetty",
+    "Karthik Reddy B",
+    "Arjun Mehta",
     "Rahul Sharma",
-    "Sneha Chauhan"
+    "Priya Nair"
   ]
 }

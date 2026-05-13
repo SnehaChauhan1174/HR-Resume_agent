@@ -4,53 +4,79 @@
       "candidate_name": "Rahul Sharma",
       "skills_match": {
         "score": 7.0,
-        "justification": "The candidate has two out of three required skills: Python and APIs are present through Django REST and FastAPI, but communication is not explicitly mentioned as a skill."
+        "justification": "The candidate has 1 out of 3 required skills explicitly mentioned, which is Python, and also has APIs experience through FastAPI and Django REST."
       },
       "experience_relevance": {
         "score": 6.0,
-        "justification": "The candidate has relevant experience in software development, but it is not directly related to AI enablement, having worked as a software engineering intern and backend developer intern."
+        "justification": "The candidate has 0.58 years of experience with some relevance to the role through software engineering and backend development internships, but lacks direct experience in AI enablement."
       },
       "education_certs": {
-        "score": 9.0,
-        "justification": "The candidate has a Computer Science degree with a high CGPA of 8.6 from a prestigious institution, exceeding the education requirements."
+        "score": 8.0,
+        "justification": "The candidate has a B.Tech degree from a reputable institution, which is close to the required Computer Science degree, and also has relevant certifications like Google Cloud Professional Data Engineer Certification and AWS Certified Solutions Architect \u2014 Associate."
       },
       "project_portfolio": {
-        "score": 8.0,
-        "justification": "The candidate has quality projects such as SentiNews, which is relevant to AI, but it does not directly demonstrate experience with AI agents or responsible AI."
+        "score": 6.0,
+        "justification": "The candidate has 2 projects, SentiNews and CodeCollab, which demonstrate some relevant skills like Python, FastAPI, and HuggingFace, but do not fully align with the key responsibilities of building AI agents and documenting decisions."
       },
       "communication_quality": {
-        "score": 5.0,
-        "justification": "The candidate's profile is well-structured, but there is no explicit evidence of strong communication skills, which are required for the role."
+        "score": 8.0,
+        "justification": "The candidate's profile is well-structured and clearly presents their skills, experience, education, and projects, indicating good communication quality."
       },
-      "weighted_total": 7.05,
+      "weighted_total": 6.8,
       "recommendation": "hire",
-      "summary": "Rahul Sharma is a strong candidate with a solid education background and relevant experience in software development, but may require additional training to meet the specific requirements of the AI Enablement Intern role. Overall, the candidate has a good balance of skills and experience, making them a suitable hire for the position."
+      "summary": "Rahul Sharma is a strong candidate with relevant skills and experience, but may require some training to fully meet the requirements of the AI Enablement Intern role. The candidate's education, certifications, and project portfolio are impressive, but the lack of direct experience in AI enablement is a concern."
+    },
+    {
+      "candidate_name": "Ria Bishnoi",
+      "skills_match": {
+        "score": 0.0,
+        "justification": "The candidate does not possess any of the required skills, including Python, APIs, or communication."
+      },
+      "experience_relevance": {
+        "score": 0.0,
+        "justification": "The candidate has no relevant work experience in the AI enablement domain, with all roles being in human resources."
+      },
+      "education_certs": {
+        "score": 2.0,
+        "justification": "The candidate's education does not meet the required Computer Science degree, but has a strong academic record in a related field."
+      },
+      "project_portfolio": {
+        "score": 0.0,
+        "justification": "The candidate has no projects listed in their profile, indicating a lack of practical experience."
+      },
+      "communication_quality": {
+        "score": 2.0,
+        "justification": "The candidate's profile is well-structured, but lacks clarity and impact in terms of showcasing relevant skills and experience for the AI enablement role."
+      },
+      "weighted_total": 0.5,
+      "recommendation": "no_hire",
+      "summary": "Ria Bishnoi's profile does not demonstrate the necessary skills, experience, or education required for the AI Enablement Intern role, making her a poor fit for the position. The lack of relevant experience and skills makes it unlikely that she would be able to succeed in this role."
     },
     {
       "candidate_name": "Sneha Chauhan",
       "skills_match": {
-        "score": 5.0,
-        "justification": "The candidate has one required skill, Python, but lacks explicit mention of APIs and communication skills."
+        "score": 7.0,
+        "justification": "The candidate has the required skill Python and partially meets other requirements with skills like Streamlit, but lacks explicit mention of APIs and communication skills."
       },
       "experience_relevance": {
-        "score": 0.0,
-        "justification": "The candidate has no relevant work experience listed in their profile."
+        "score": 2.0,
+        "justification": "The candidate has no listed work experience, which is a significant gap for the AI Enablement Intern role."
       },
       "education_certs": {
         "score": 9.0,
-        "justification": "The candidate has a relevant degree in Artificial Intelligence and Machine Learning with a high CGPA, exceeding the education requirements."
+        "justification": "The candidate's B.Tech in Artificial Intelligence and Machine Learning exceeds the required education of a Computer Science degree."
       },
       "project_portfolio": {
-        "score": 7.0,
-        "justification": "The candidate has a variety of projects, including one that uses Streamlit, a nice-to-have skill, but none of the projects directly relate to building AI agents or responsible AI."
+        "score": 8.0,
+        "justification": "The candidate has a portfolio of projects including a movie recommendation system that showcases relevant technical skills like machine learning, but lacks direct evidence of building AI agents or documenting decisions."
       },
       "communication_quality": {
         "score": 6.0,
-        "justification": "The candidate's project descriptions are clear and well-structured, but the resume could benefit from more details on their skills and experience."
+        "justification": "The candidate's project descriptions and skill list demonstrate good technical writing skills, but the overall communication quality is not explicitly assessed beyond these elements."
       },
-      "weighted_total": 4.85,
+      "weighted_total": 6.15,
       "recommendation": "maybe",
-      "summary": "Sneha Chauhan is a strong educational background candidate with relevant skills and projects, but lacks relevant work experience and some required skills, making them a maybe hire. With some training and development, Sneha could potentially fill the AI Enablement Intern role, but would need to demonstrate their ability to learn and adapt to the required skills and responsibilities."
+      "summary": "Sneha Chauhan has a strong educational background and some relevant projects, but lacks work experience and a comprehensive demonstration of required skills like APIs and communication. Overall, the candidate shows promise but requires further evaluation to assess their fit for the AI Enablement Intern role."
     }
   ],
   "rejected_candidates": [

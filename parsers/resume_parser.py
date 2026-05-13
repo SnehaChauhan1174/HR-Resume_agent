@@ -12,10 +12,14 @@ from datetime import datetime
 # so that it don't take paths relative to current directory
 BASE_DIR = Path(__file__).resolve().parent
 
-RESUME_FOLDER = BASE_DIR.parent / "resumes"
-OUTPUT_FOLDER = BASE_DIR / "output"
+# RESUME_FOLDER = BASE_DIR.parent / "resumes"
+# with these — both point to same folder
+OUTPUT_FOLDER = BASE_DIR.parent / "output"
 LOG_FILE      = BASE_DIR.parent / "output" / "pipeline_log.json"
-JD_FILE       = BASE_DIR / "sample_jd.txt"
+# JD_FILE       = BASE_DIR / "sample_jd.txt"
+
+Path(OUTPUT_FOLDER).mkdir(parents=True, exist_ok=True)
+Path(LOG_FILE).parent.mkdir(parents=True, exist_ok=True)
 
 # ── Step printer
 def step(number: int, title: str):
@@ -24,7 +28,7 @@ def step(number: int, title: str):
 
 
 # ── Main pipeline
-def run_pipeline():
+def run_pipeline(resume_paths:list[str],jd_text:str,linkedin_urls:list[str] | None=None):
 
     Path(OUTPUT_FOLDER).mkdir(exist_ok=True)
 
@@ -32,20 +36,17 @@ def run_pipeline():
     step(1, "Parsing Job Description")
 
     try:
-        with open(JD_FILE, "r") as f:
-            jd_text = f.read()
+
         jd_requirements = parse_jd(jd_text)
         print(f"  Role   : {jd_requirements.role_title}")
         print(f"  Skills : {len(jd_requirements.required_skills)} required")
 
         # save jd output
-        with open(f"{OUTPUT_FOLDER}jd_output.json", "w") as f:
+        with open(OUTPUT_FOLDER / "jd_output.json", "w") as f:
             json.dump(jd_requirements.model_dump(), f, indent=2)
         print(f"  Saved  : {OUTPUT_FOLDER}jd_output.json")
 
-    except FileNotFoundError:
-        print(f"  ERROR: {JD_FILE} not found.")
-        return [], [], []
+
 
     except ValueError as e:
         print(f"  ERROR: JD parsing failed — {e}")
@@ -54,10 +55,10 @@ def run_pipeline():
     # ── STEP 2: Process Resumes ──
     step(2, "Processing Resumes")
 
-    pdf_files = list(Path(RESUME_FOLDER).glob("*.pdf"))
-
+    # pdf_files = list(Path(RESUME_FOLDER).glob("*.pdf"))
+    pdf_files = [Path(p) for p in resume_paths]
     if not pdf_files:
-        print(f"  ERROR: No PDFs found in {RESUME_FOLDER}")
+        print(f"  ERROR: No PDFs found.")
         return [], [], []
 
     print(f"  Found {len(pdf_files)} resume(s)\n")
@@ -82,7 +83,7 @@ def run_pipeline():
             cleaned_text = fix_sections(cleaned_text)
 
         except Exception as e:
-            print(f"    ✗ Text extraction failed — {e}")
+            print(f"   Text extraction failed — {e}")
             failed.append({
                 "file": pdf_path.name,
                 "stage": "extraction",
@@ -94,7 +95,7 @@ def run_pipeline():
         res = extract_structured_resume(cleaned_text, pdf_path.name)
 
         if res.status != "passed":
-            print(f"    ✗ Structured extraction failed — "
+            print(f"   Structured extraction failed — "
                   f"{res.error_type}: {res.error_detail[:80]}")
             failed.append({
                 "file": pdf_path.name,
@@ -158,25 +159,18 @@ def run_pipeline():
 
 
     if failed:
-        print("  Failed resumes:")
+        print("Failed resumes:")
         for f in failed:
-            print(f"    • {f['file']} → {f['reason']}")
+            print(f" {f['file']} → {f['reason']}")
 
     if rejected:
-        print("\n  Rejected resumes:")
+        print("\nRejected resumes:")
         for r in rejected:
-            print(f"    • {r['file']} → {r['reason']}")
+            print(f" {r['file']} → {r['reason']}")
 
     # return passed for next step — scoring
     return passed, failed, rejected
 
 
-# ── Entry point ───────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    passed_resumes, failed_resumes, rejected_resumes = run_pipeline()
-
-    if passed_resumes:
-        print(f"\n  {len(passed_resumes)} resume(s) ready for scoring.")
-
-    else:
-        print("\n  No resumes passed pipeline. Check resumes/ folder.\n")
+    print("Run pipeline from Streamlit UI.")

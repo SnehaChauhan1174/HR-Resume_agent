@@ -1,33 +1,10 @@
 {
-  "role_title": "AI Enablement Intern",
-  "required_skills": [
-    "Python",
-    "APIs",
-    "written and verbal communication skills"
-  ],
-  "preferred_skills": [
-    "LLMs",
-    "ChatGPT",
-    "Claude",
-    "LangChain",
-    "CrewAI",
-    "Git",
-    "GitHub"
-  ],
+  "role_title": "",
+  "required_skills": [],
+  "preferred_skills": [],
   "experience_years_min": 0,
-  "education_required": "Currently pursuing a degree in Computer Science or related field",
-  "certifications": [
-    "cloud certification",
-    "AI course on Coursera or DeepLearning.AI"
-  ],
-  "key_responsibilities": [
-    "Build and prototype AI agent solutions",
-    "Document technical decisions and architecture clearly",
-    "Test agents against real data and iterate on results",
-    "Present demos to the team weekly"
-  ],
-  "nice_to_have": [
-    "Experience with Streamlit or Gradio",
-    "Interest in responsible AI and bias mitigation"
-  ]
+  "education_required": "",
+  "certifications": [],
+  "key_responsibilities": [],
+  "nice_to_have": []
 }

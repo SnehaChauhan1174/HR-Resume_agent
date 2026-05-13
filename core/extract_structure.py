@@ -46,11 +46,7 @@ class Resume(BaseModel):
         return self.model_dump()
 
 class ResumeResult(BaseModel):
-    """
-    Wrapper around Resume.
-    Carries status so main.py can route
-    passed vs failed without try/except everywhere.
-    """
+
     filename: str
     status: str                          # "passed" or "failed"
     resume: Optional[Resume] = None      # present only if status == "passed"
@@ -61,7 +57,7 @@ class ResumeResult(BaseModel):
     def to_dict(self) -> dict:
         """
         Returns the resume profile dict.
-        Called by main.py to pass profile to filter and scorer.
+        Called by resume_parser.py to pass profile to filter and scorer.
         Returns empty dict if extraction failed.
         """
         if self.resume:

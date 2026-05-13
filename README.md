@@ -70,7 +70,7 @@ Four approaches evaluated:
     - formatting errors
     - section merged with content
 - batch loading of functions
-- PII masking for logs
+
 
 ### Input Validation: validator.py
 

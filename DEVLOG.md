@@ -421,54 +421,25 @@ final_output = {
 
 
 ---
-## LinkedIn Profile Ingestion (Planned)
+### LinkedIn Ingestion — Three approaches implemented
 
-The system is being designed to support multiple candidate data sources in addition to PDF resumes. Recruiters will be able to upload LinkedIn profile URLs for candidate evaluation.
+1. RapidAPI scraper (primary): HR pastes LinkedIn URL →
+   RapidAPI fetches structured profile JSON → mapped to
+   CandidateProfile schema. Free tier: 100 requests/month.
 
-### Current Resume Pipeline
+2. LinkedIn JSON export (recommended for accuracy): Candidate
+   exports their own data from LinkedIn Settings. HR uploads
+   Profile.json. Zero cost. Zero ToS risk. 100% accurate.
 
-```text
-PDF Resume
- → Text Extraction (pdfplumber)
- → Text Cleaning
- → Structured Extraction (LLM + Pydantic)
- → Candidate Profile
-```
+3. Text paste (fallback): HR copies text from LinkedIn page,
+   pastes into UI. LLM extracts profile. Works when API is
+   unavailable.
 
-### Planned LinkedIn Pipeline
+Rejected: Playwright/Selenium — LinkedIn actively blocks
+scrapers, violates ToS, fails unpredictably during demos.
 
-```text
-LinkedIn URL
- → Profile Scraping / Extraction
- → Raw Profile Text
- → Structured Extraction (LLM + Pydantic)
- → Candidate Profile
-```
-
-Both resumes and LinkedIn profiles will ultimately produce the same standardized candidate schema, enabling reuse of the same:
-- validation pipeline
-- scoring engine
-- ranking logic
-- recruiter dashboard
-
-### Unified Candidate Schema
-
-```json
-{
-  "name": "Rahul Sharma",
-  "skills": ["Python", "FastAPI", "Docker"],
-  "experience": [...],
-  "education": [...],
-  "projects": [...],
-  "certifications": [...]
-}
-```
-
-### Planned Extraction Approaches
-
-- Browser automation using Playwright/Selenium
-- Third-party APIs such as Proxycurl
-- Manual LinkedIn PDF/text uploads
+All three approaches produce an identical CandidateProfile
+object. Scorer receives the same input regardless of source.
 
 This architecture also makes it easy to support future sources such as GitHub profiles, portfolio websites, and coding platforms.
 
